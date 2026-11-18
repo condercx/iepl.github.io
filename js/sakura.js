@@ -124,14 +124,17 @@ const LEAF_COLORS = [
 	'rgba(212, 163, 115, ALPHA)'   // 浅黄褐
 ];
 
-function Leaf() {
-	this.respawn();
+function Leaf(seedOnScreen) {
+	this.respawn(seedOnScreen);
 }
 
-Leaf.prototype.respawn = function () {
+Leaf.prototype.respawn = function (seedOnScreen) {
 	this.x = Math.random() * window.innerWidth;
-	this.y = -20 - Math.random() * window.innerHeight * 0.4;
-	this.s = 0.5 + Math.random() * 0.8;
+	// 首屏直接铺满可视区域，与樱花、飘雪保持一致；之后才从顶部重新飘入
+	this.y = seedOnScreen
+		? Math.random() * window.innerHeight
+		: -20 - Math.random() * window.innerHeight * 0.25;
+	this.s = 0.7 + Math.random() * 0.9;
 	this.r = Math.random() * 6;
 	this.sway = Math.random() * Math.PI * 2;
 	this.swaySpeed = 0.012 + Math.random() * 0.02;
@@ -298,7 +301,7 @@ function buildScene(season) {
 		}
 	} else {
 		for (let i = 0; i < LEAF_COUNT; i++) {
-			items.push(new Leaf());
+			items.push(new Leaf(true));
 		}
 	}
 	return { season: season, items: items, beams: [] };
