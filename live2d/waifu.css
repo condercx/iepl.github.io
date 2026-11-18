@@ -25,18 +25,19 @@
 	box-shadow: 0 3px 15px 2px rgba(191, 158, 118, .2);
 	font-size: 14px;
 	line-height: 24px;
-	/* 气泡靠在角色拿书那只手的左侧，垂直与手齐平，且不压住身体 */
+	/* 气泡贴着手：手在模型画布约 87% 宽、44% 高处，
+	   即距右边缘 39px、距底部 168px，这里让气泡右边缘略微越过手、垂直与手齐平 */
 	margin: 0;
 	min-height: 44px;
 	opacity: 0;
 	overflow: hidden;
 	padding: 5px 10px;
 	position: absolute;
-	right: 66px;
-	bottom: 132px;
+	right: 36px;
+	bottom: 156px;
 	text-overflow: ellipsis;
 	transition: opacity 1s;
-	width: 200px;
+	width: 180px;
 	word-break: break-all;
 	/* 盖在角色上方，避免被模型画布遮住 */
 	z-index: 3;
