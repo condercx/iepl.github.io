@@ -25,19 +25,21 @@
 	box-shadow: 0 3px 15px 2px rgba(191, 158, 118, .2);
 	font-size: 14px;
 	line-height: 24px;
-	/* 气泡贴在模型右下方，与角色保持很近的距离 */
+	/* 气泡放在模型的左边，避开角色本体，不与之重叠 */
 	margin: 0;
 	min-height: 44px;
 	opacity: 0;
 	overflow: hidden;
 	padding: 5px 10px;
 	position: absolute;
-	right: -6px;
-	bottom: 130px;
+	right: 314px;
+	bottom: 120px;
 	text-overflow: ellipsis;
 	transition: opacity 1s;
 	width: 230px;
 	word-break: break-all;
+	/* 盖在角色上方，避免被模型画布遮住 */
+	z-index: 3;
 }
 
 #waifu-tips.waifu-tips-active {
