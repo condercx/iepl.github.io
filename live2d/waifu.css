@@ -25,18 +25,18 @@
 	box-shadow: 0 3px 15px 2px rgba(191, 158, 118, .2);
 	font-size: 14px;
 	line-height: 24px;
-	/* 气泡放在模型的左边，避开角色本体，不与之重叠 */
+	/* 气泡靠在角色拿书那只手的左侧，垂直与手齐平，且不压住身体 */
 	margin: 0;
 	min-height: 44px;
 	opacity: 0;
 	overflow: hidden;
 	padding: 5px 10px;
 	position: absolute;
-	right: 314px;
-	bottom: 120px;
+	right: 66px;
+	bottom: 132px;
 	text-overflow: ellipsis;
 	transition: opacity 1s;
-	width: 230px;
+	width: 200px;
 	word-break: break-all;
 	/* 盖在角色上方，避免被模型画布遮住 */
 	z-index: 3;

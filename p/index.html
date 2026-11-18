@@ -574,8 +574,7 @@ title = &lsquo;稳定机场汇总&rsquo;
   }
 
   
-  if (screen.width >= 768) {
-    Promise.all([
+  Promise.all([
       loadExternalResource(config.path.cssPath, "css"),
       loadExternalResource(config.path.live2dCorePath, "js"),
       loadExternalResource(config.path.live2dSdkPath, "js"),
@@ -590,7 +589,6 @@ title = &lsquo;稳定机场汇总&rsquo;
         switchType: config.switchType
       });
     });
-  }
 
   
   function loadExternalResource(url, type) {

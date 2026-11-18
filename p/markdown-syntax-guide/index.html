@@ -843,8 +843,7 @@
   }
 
   
-  if (screen.width >= 768) {
-    Promise.all([
+  Promise.all([
       loadExternalResource(config.path.cssPath, "css"),
       loadExternalResource(config.path.live2dCorePath, "js"),
       loadExternalResource(config.path.live2dSdkPath, "js"),
@@ -859,7 +858,6 @@
         switchType: config.switchType
       });
     });
-  }
 
   
   function loadExternalResource(url, type) {
