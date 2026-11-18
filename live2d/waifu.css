@@ -1,30 +1,32 @@
 #waifu-toggle {
 	background-color: #fa0;
-	border-radius: 5px;
+	border-radius: 5px 0 0 5px;
 	bottom: 66px;
 	color: #fff;
 	cursor: pointer;
 	font-size: 12px;
-	left: 0;
-	margin-left: -100px;
-	padding: 5px 2px 5px 5px;
+	right: 0;
+	/* 只露出一小条，悬停时再滑出，且不越出视口 */
+	margin-right: -20px;
+	padding: 5px 5px 5px 2px;
 	position: fixed;
-	transition: margin-left 1s;
+	transition: margin-right 1s;
 	width: 60px;
 	writing-mode: vertical-rl;
+	z-index: 2;
 }
 
 #waifu-toggle.waifu-toggle-active {
-	margin-left: -50px;
+	margin-right: -20px;
 }
 
 #waifu-toggle.waifu-toggle-active:hover {
-	margin-left: -30px;
+	margin-right: 0;
 }
 
 #waifu {
 	bottom: -1000px;
-	left: 0;
+	right: 0;
 	line-height: 0;
 	margin-bottom: -10px;
 	position: fixed;
@@ -45,12 +47,14 @@
 	box-shadow: 0 3px 15px 2px rgba(191, 158, 118, .2);
 	font-size: 14px;
 	line-height: 24px;
+	/* 气泡相对角色向左展开，避免贴到浏览器右边缘被裁掉 */
 	margin: -30px 20px;
 	min-height: 70px;
 	opacity: 0;
 	overflow: hidden;
 	padding: 5px 10px;
 	position: absolute;
+	right: 250px;
 	text-overflow: ellipsis;
 	transition: opacity 1s;
 	width: 250px;
