@@ -202,22 +202,26 @@
 			var layer = document.createElement('div');
 			layer.className = 'season-bg';
 			layer.style.backgroundImage = 'url("' + url + '")';
-			el.insertBefore(layer, veil);
+			// 新层直接到位、垫在旧层下面；旧层在上方淡出，
+			// 这样即使浏览器不推进 transition，画面也不会变成空白
+			layer.style.opacity = '1';
+			el.insertBefore(layer, old.length ? old[0] : veil);
 			activeLayer = layer;
 
-			// 强制一次同步回流，让初始 opacity:0 生效
-			void layer.offsetWidth;
-			// 用 setTimeout 而非 requestAnimationFrame：后台标签页会冻结 rAF，
-			// 那样 is-shown 永远加不上，背景就会一直是透明的
-			window.setTimeout(function () {
-				layer.classList.add('is-shown');
-			}, 30);
+			// 旧层淡出，结束后移除
+			old.forEach(function (o) {
+				o.classList.remove('is-shown');
+				o.style.opacity = '0';
+			});
 
-			// 新层完全显示后清掉旧层；只删本轮之前的层，绝不碰 activeLayer
 			if (fadeTimer) {
 				window.clearTimeout(fadeTimer);
 			}
+			var token = layer;
 			fadeTimer = window.setTimeout(function () {
+				if (token !== activeLayer) {
+					return;
+				}
 				old.forEach(function (o) {
 					if (o !== activeLayer && o.parentNode) {
 						o.parentNode.removeChild(o);
