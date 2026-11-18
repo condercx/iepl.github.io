@@ -15,13 +15,34 @@ const SEASON_NAMES = ['spring', 'summer', 'autumn', 'winter'];
 const PETAL_COUNT = 50;   // 与樱花一致的粒子密度
 const LEAF_COUNT = 28;    // 落叶刻意稀疏，符合「零零散散」
 const BEAM_COUNT = 7;
+const SEASON_STORAGE_KEY = 'TachikaSeason';
+
+// 保存当前会话里手动选过的季节，避免被地址栏参数反复盖回
+let sessionSeason = '';
 
 function resolveSeason() {
+	// 用户刚点过切换器，就以他选的为准
+	if (sessionSeason) {
+		return sessionSeason;
+	}
+	let saved = '';
+	try {
+		saved = (window.localStorage.getItem(SEASON_STORAGE_KEY) || '').toLowerCase();
+	} catch (e) {
+		saved = '';
+	}
+	if (saved && SEASON_NAMES.indexOf(saved) >= 0) {
+		return saved;
+	}
+	// 地址栏 ?season= 仅在没有用户偏好时作为预览入口
 	const override = (new URLSearchParams(window.location.search).get('season') || '').toLowerCase();
 	if (override && SEASON_NAMES.indexOf(override) >= 0) {
 		return override;
 	}
-	const month = new Date().getMonth() + 1;
+	return seasonForMonth(new Date().getMonth() + 1);
+}
+
+function seasonForMonth(month) {
 	if (month === 12 || month <= 2) {
 		return 'winter';
 	}
@@ -32,6 +53,25 @@ function resolveSeason() {
 		return 'summer';
 	}
 	return 'autumn';
+}
+
+// 切换器与背景图共用：写偏好并重开当前场景
+function setSeason(season) {
+	if (SEASON_NAMES.indexOf(season) < 0) {
+		return;
+	}
+	sessionSeason = season;
+	try {
+		window.localStorage.setItem(SEASON_STORAGE_KEY, season);
+	} catch (e) {
+		/* 隐私模式下写不进去，本次仍然切换 */
+	}
+	startScene(season);
+}
+
+// 供外部读取当前生效的季节
+function currentSeason() {
+	return resolveSeason();
 }
 
 /* ---------------- 春：樱花 ---------------- */
@@ -364,6 +404,14 @@ window.addEventListener('resize', function () {
 		sceneCanvas.height = window.innerHeight;
 	}
 });
+
+// 季节切换器与背景图通过这个接口驱动特效
+window.TachikaSeason = {
+	names: SEASON_NAMES.slice(),
+	current: currentSeason,
+	set: setSeason,
+	byMonth: seasonForMonth
+};
 
 (function boot() {
 	const launch = function () {
