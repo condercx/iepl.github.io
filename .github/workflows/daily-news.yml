@@ -1,0 +1,57 @@
+name: Update daily news
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '11,41 * * * *'
+permissions:
+  contents: read
+concurrency:
+  group: daily-news-edition
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -B -m unittest discover -s tools -p 'test_news*.py'
+      - run: python3 -B tools/update_news.py --output "$RUNNER_TEMP/edition.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daily-edition
+          path: ${{ runner.temp }}/edition.json
+          retention-days: 1
+  publish:
+    needs: collect
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: daily-edition
+          path: ${{ runner.temp }}/news
+      - name: Publish data without changing the site branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin refs/heads/news-data > /dev/null; then
+            git fetch --depth=1 origin refs/heads/news-data
+            git switch -C news-data FETCH_HEAD
+          else
+            rc=$?; [[ "$rc" == 2 ]] || exit "$rc"
+            git switch --orphan news-data
+          fi
+          out=p/daily-news/edition.json
+          mkdir -p p/daily-news
+          if [[ -f "$out" ]] && jq -e -s '.[0].date == .[1].date and .[0].stories == .[1].stories' "$out" "$RUNNER_TEMP/news/edition.json" >/dev/null; then
+            echo 'Stories unchanged'; exit 0
+          fi
+          cp "$RUNNER_TEMP/news/edition.json" "$out"
+          git add -- "$out"
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Update daily news edition'
+          git push origin HEAD:refs/heads/news-data
