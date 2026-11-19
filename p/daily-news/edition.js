@@ -1,9 +1,8 @@
 (() => {
   'use strict';
-  const remote = 'https://raw.githubusercontent.com/kanatachika/iepl.github.io/news-data/p/daily-news/edition.json';
   const cacheKey = 'daily-news:last-photo-edition:v1';
   const dateLine = document.querySelector('#date');
-  const status = document.querySelector('#status');
+  const status = document.querySelector('#feedback');
   const sections = document.querySelector('#sections');
   const day = new Intl.DateTimeFormat('sv-SE', {timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit'});
   const clock = new Intl.DateTimeFormat('zh-CN', {timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'});
@@ -86,70 +85,54 @@
   }
   let best = null;
   const refresh = document.querySelector('#refresh');
-  let pending = 0;
-  let feedback = '';
-  let empty = false;
-  let remoteFailed = false;
-  function report() {
-    let text;
-    if (!best) text = pending ? '正在读取本期图文…' : empty ? '暂无已发布的完整图文期次。' : '暂无可用图文期次：未能读取十则图片和摘要均完整的报道，请稍后刷新。';
-    else {
-      const today = day.format(new Date());
-      text = best.date !== today ? `往期存档：以下为 ${best.date} 的报道，并非北京时间今日（${today}）的榜单。` : '本期为北京时间今日收录。';
-      if (pending) text += ' 正在核对最新期次…';
-      else if (remoteFailed) text += ' 更新源暂不可用，当前显示已核验的快照。';
-    }
-    status.textContent = feedback ? `${text} ${feedback}` : text;
-  }
-  async function load(url, manual) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 9000);
-    try {
-      let data;
-      if (url === null) data = JSON.parse(localStorage.getItem(cacheKey));
-      else {
-        const target = manual ? `${url}?check=${Date.now()}` : url;
-        const res = await fetch(target, {cache: manual ? 'no-store' : 'no-cache', credentials: 'omit', signal: controller.signal});
-        if (!res.ok) throw Error('unavailable');
-        data = await res.json();
-      }
-      if (!valid(data)) throw Error('invalid edition');
-      if (!data.date) { empty = true; return; }
-      if (best && Date.parse(data.updated) <= Date.parse(best.updated)) return true;
-      const rows = await Promise.all(data.stories.map(story));
-      // A slower fetch or decode must not replace a newer, complete edition.
-      if (best && Date.parse(data.updated) <= Date.parse(best.updated)) return;
-      const head = el('div', undefined, 'section-head');
-      head.append(el('h2', '本期热度排序'), el('span', '国内 4 · 国际 6', 'count'));
-      const list = el('ol');
-      list.append(...rows);
-      sections.replaceChildren(head, list);
-      dateLine.textContent = `${data.date}  /  北京时间 ${clock.format(new Date(data.updated))} 更新`;
-      best = data;
-      if (url !== null) { try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch {} }
-      return true;
-    } catch { if (url === remote) remoteFailed = true; }
-    finally { clearTimeout(timer); pending--; report(); }
+  const checked = document.querySelector('#checked');
+  const stamp = new Intl.DateTimeFormat('sv-SE', {timeZone: 'Asia/Shanghai', dateStyle: 'short', timeStyle: 'medium'});
+
+  async function display(data) {
+    if (!valid(data)) throw Error('invalid edition');
+    if (!data.date || (best && Date.parse(data.updated) <= Date.parse(best.updated))) return false;
+    const rows = await Promise.all(data.stories.map(story));
+    const head = el('div', undefined, 'section-head');
+    head.append(el('h2', '本期热度排序'), el('span', '国内 4 · 国际 6', 'count'));
+    const list = el('ol');
+    list.append(...rows);
+    sections.replaceChildren(head, list);
+    dateLine.textContent = `本期生成（北京时间）：${stamp.format(new Date(data.updated))}`;
+    best = data;
+    return true;
   }
   async function check(manual) {
     if (refresh.disabled) return;
     refresh.disabled = true;
     refresh.textContent = manual ? '刷新中…' : '读取中…';
-    const before = best;
-    feedback = '';
-    remoteFailed = empty = false;
-    const urls = manual ? ['./edition.json', remote] : [null, './edition.json', remote];
-    pending = urls.length;
-    report();
+    status.textContent = '正在核对本站已发布的期次…';
+    if (!manual) {
+      try { await display(JSON.parse(localStorage.getItem(cacheKey))); } catch {}
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 9000);
+    let feedback;
     try {
-      const results = await Promise.all(urls.map(url => load(url, manual)));
-      if (manual && best !== before) feedback = '已载入新版榜单。';
-      else if (manual && results.at(-1) && best) feedback = '没有新一期。';
-      else if (manual) feedback = '未能确认有新一期，可稍后再试。';
+      const res = await fetch('./edition.json', {cache: 'no-store', credentials: 'omit', signal: controller.signal});
+      if (!res.ok) throw Error('unavailable');
+      const data = await res.json();
+      if (await display(data)) {
+        feedback = '已载入新版榜单。';
+        try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch {}
+      } else {
+        feedback = best ? '没有新一期。' : '暂无已发布的完整图文期次。';
+      }
+    } catch {
+      feedback = best ? '检查失败，保留上次载入的完整榜单。' : '检查失败，暂无可用的完整榜单，请稍后再试。';
     } finally {
+      clearTimeout(timer);
+      const now = new Date();
+      checked.textContent = `最近检查（北京时间）：${stamp.format(now)}`;
+      const today = day.format(now);
+      const note = !best ? '' : best.date === today ? '本期为北京时间今日收录。' : `往期存档：以下为 ${best.date} 的报道，并非北京时间今日（${today}）的榜单。`;
+      status.textContent = feedback + note;
       refresh.disabled = false;
       refresh.textContent = '刷新榜单';
-      report();
     }
   }
   refresh.hidden = false;
