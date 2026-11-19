@@ -2,13 +2,14 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://raw.githubusercontent.com/kanatachika/iepl.github.io/news-data/p/daily-news/edition.json">
+  <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="按北京时间整理的国内与国际热点报道，附摘要、来源和原文链接。">
+  <meta name="description" content="按北京时间整理的国内与国际热点报道，每则附原文配图、摘要与来源链接。">
   <title>每日热点新闻 · tachika</title>
   <link rel="icon" href="../../favicon.ico">
   <link rel="stylesheet" href="../../scss/style.min.03118a908da6cd07094e2b3cb060a9d51134a6999a3cf8ebe590f477d3b51306.css">
   <link rel="stylesheet" href="./edition.css">
-  <script>try { const s = localStorage.getItem('StackColorScheme'); document.documentElement.dataset.scheme = s === 'dark' || (s !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; } catch {}</script>
   <script src="./edition.js" defer></script>
 </head>
 <body>
@@ -18,9 +19,9 @@
       <header class="masthead">
         <p class="dateline" id="date">按北京时间编排</p>
         <h1>每日热点新闻</h1>
-        <p class="deck">国内四则，国际六则。读摘要，查原文。</p>
+        <p class="deck">国内四则，国际六则。每则附原文配图、摘要和出处。</p>
       </header>
-      <div class="notice" role="status" id="status">正在读取本期报道…</div>
+      <div class="notice" role="status" id="status">正在读取本期图文…</div>
       <noscript><p class="notice">请启用 JavaScript 以读取报道，或<a href="./edition.json">查看本站收录数据</a>。</p></noscript>
       <div id="sections"></div>
       <footer><h2>编排说明</h2><p>只比较当日已收录报道。优先多来源报道；有榜单时参考名次，公开的点赞和评论也计入排序（两者之和加 1，取以 2 为底的对数，最多计 9 分），再以报道时间打破平局。这不是全网点击榜。</p></footer>

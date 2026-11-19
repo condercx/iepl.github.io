@@ -6,8 +6,8 @@ body { color: var(--ink); font-size: 16px; }
 .reader nav, .section-head { justify-content: space-between; }
 .reader nav { align-items: center; padding: 0 4px 12px; }
 .reader nav span, .dateline, .count, .byline, footer p { color: var(--quiet); }
-.reader a, .reader button { color: var(--accent); }
-.reader nav a, .byline a, .reader button { display: inline-flex; align-items: center; min-height: 44px; }
+.reader a { color: var(--accent); }
+.reader nav a, .byline a, figcaption a { display: inline-flex; align-items: center; min-height: 44px; }
 .reader a:hover { text-decoration: underline; }
 .reader :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .reader main { display: block; background: var(--card-background); box-shadow: var(--shadow-l1); border-radius: var(--card-border-radius); padding: clamp(20px, 6vw, 64px); overflow-wrap: anywhere; }
@@ -27,8 +27,9 @@ body { color: var(--ink); font-size: 16px; }
 .reader h3 { font-size: clamp(20px, 3vw, 26px); line-height: 1.5; }
 .summary { margin: 8px 0; }
 .byline a { text-decoration: underline; text-underline-offset: 3px; }
-.reader button { border: 1px solid var(--rule); border-radius: 4px; background: transparent; padding: 0 12px; cursor: pointer; }
-.reader iframe, .reader video { display: block; width: 100%; aspect-ratio: 16/9; border: none; margin-top: 8px; }
+.reader figure { margin: 12px 0 6px; }
+.reader figure img { display: block; max-width: 100%; height: auto; max-height: 28rem; object-fit: contain; object-position: left center; }
+.reader figcaption { font-size: 14px; color: var(--quiet); }
 .reader footer { margin-top: 32px; border-top: 1px solid var(--rule); padding-top: 16px; }
 .reader footer h2 { font-size: 18px; margin-bottom: 8px; }
 @media (max-width: 560px) { .reader { width: calc(100% - 16px); margin-top: 4px; } .reader li { grid-template-columns: 2em minmax(0,1fr); gap: 8px; } .number { font-size: 24px; } }

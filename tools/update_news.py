@@ -51,14 +51,22 @@ def edition(rows, now):
     stories = []
     for group in groups:
         items = [r for r, _ in group]
-        best = max(items, key=lambda r: (bool(r.get('video')), bool(r.get('summary')), r['published']))
+        eligible = [r for r in items if isinstance(r.get('image'), str)
+                    and r['image'].startswith('data:image/jpeg;base64,/9j/')
+                    and len(r['image']) <= len('data:image/jpeg;base64,') + 163840
+                    and isinstance(r.get('image_source'), str) and r['image_source'].startswith('https://')
+                    and isinstance(r.get('summary'), str)
+                    and len(title_key(r['summary']).replace(title_key(r['title']), '')) >= 16]
+        if not eligible:
+            continue
+        best = max(eligible, key=lambda r: r['published'])
         sources = sorted({r['source'] for r in items})
         rank = min((r['rank'] for r in items if r['rank']), default=None)
         # Each extra publisher outweighs any single placement. Recency is only a tie-break.
         likes = max((r['likes'] for r in items if type(r.get('likes')) is int and r['likes'] >= 0), default=0)
         comments = max((r['comments'] for r in items if type(r.get('comments')) is int and r['comments'] >= 0), default=0)
         score = round(100 * (len(sources) - 1) + (90 / rank if rank else 0) + min(9, log2(1 + likes + comments)), 2)
-        stories.append({k: best.get(k) for k in ('region','title','url','source','published','summary','video')} |
+        stories.append({k: best.get(k) for k in ('region','title','url','source','published','summary','image','image_source')} |
                        {'sources': sources, 'rank': best['rank'], 'likes': best.get('likes', 0), 'comments': best.get('comments', 0), 'score': score})
     stories.sort(key=lambda s: (-s['score'], -datetime.fromisoformat(s['published']).timestamp(), s['url']))
     counts = dict.fromkeys(QUOTAS, 0)
@@ -74,13 +82,12 @@ def edition(rows, now):
 
 
 def main():
-    from news_sources import collect, enrich
+    from news_sources import collect
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=OUTPUT)
     dest = parser.parse_args().output
     now = datetime.now(BEIJING)
     result = edition(collect(now), now)
-    enrich(result['stories'])
     if dest.exists():
         old = json.loads(dest.read_text(encoding='utf-8'))
         if old.get('date') == result['date'] and old.get('stories') == result['stories']:
