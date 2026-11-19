@@ -101,8 +101,11 @@
     best = data;
     return true;
   }
+  const interval = 5 * 60 * 1000;
+  let lastStart = 0;
   async function check(manual) {
     if (refresh.disabled) return;
+    lastStart = new Date().getTime();
     refresh.disabled = true;
     refresh.textContent = manual ? '刷新中…' : '读取中…';
     status.textContent = '正在核对本站已发布的期次…';
@@ -137,5 +140,10 @@
   }
   refresh.hidden = false;
   refresh.addEventListener('click', () => check(true));
+  function checkIfDue() {
+    if (!document.hidden && new Date().getTime() - lastStart >= interval) return check(true);
+  }
+  setInterval(checkIfDue, interval);
+  document.addEventListener('visibilitychange', checkIfDue);
   check(false);
 })();

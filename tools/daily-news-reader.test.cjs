@@ -26,11 +26,33 @@ function reader(cache, fetch) {
   const ui = Object.fromEntries([...html.matchAll(/\bid="([^"]+)"/g)].map(([, id]) => [id, element()]));
   let now = '2025-01-02T17:04:05Z';
   class Clock extends Date { constructor(...args) { super(...(args.length ? args : [now])); } }
-  vm.runInNewContext(script, {document: {querySelector: selector => ui[selector.slice(1)], createElement: element, documentElement: {dataset: {}}},
+  const document = {...element(), hidden: false, querySelector: selector => ui[selector.slice(1)], createElement: element, documentElement: {dataset: {}}};
+  let tick, delay;
+  vm.runInNewContext(script, {document, setInterval(fn, ms) { tick = fn; delay = ms; },
     localStorage: {getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, v)}, matchMedia: () => ({matches: false}),
     fetch, Date: Clock, AbortController, URL, atob, setTimeout, clearTimeout});
-  return {ui, store, setNow(value) { now = value; }};
+  return {ui, store, document, tick: () => tick(), delay, setNow(value) { now = value; }};
 }
+
+test('visible page automatically loads a new edition; hidden tabs wait until return', async () => {
+  let requests = 0;
+  const page = reader(null, async () => ({ok: true, json: async () => ++requests === 1 ? cached : {...cached, updated: '2025-01-02T01:00:00Z'}}));
+  await new Promise(setImmediate);
+  assert.equal(page.delay, 300000);
+  page.document.hidden = true;
+  page.setNow('2025-01-02T17:10:05Z');
+  await page.tick();
+  assert.equal(requests, 1);
+  page.document.hidden = false;
+  await page.document.visibilitychange();
+  assert.equal(requests, 2);
+  assert.match(page.ui.date.textContent, /09:00/);
+  await page.tick();
+  assert.equal(requests, 2);
+  page.setNow('2025-01-02T17:15:06Z');
+  await page.tick();
+  assert.equal(requests, 3);
+});
 
 test('page permits only same-origin connections', () => {
   assert.match(html, /connect-src 'self'\s*[;"]/);
