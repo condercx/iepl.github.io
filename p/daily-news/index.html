@@ -8,24 +8,122 @@
   <meta name="description" content="按北京时间整理的国内与国际热点报道，每则附原文配图、摘要与来源链接。">
   <title>每日热点新闻 · tachika</title>
   <link rel="icon" href="../../favicon.ico">
+  <script src="./theme-init.js"></script>
   <link rel="stylesheet" href="../../scss/style.min.03118a908da6cd07094e2b3cb060a9d51134a6999a3cf8ebe590f477d3b51306.css">
   <link rel="stylesheet" href="./edition.css">
   <script src="./edition.js" defer></script>
+  <script src="./reader-ui.js" defer></script>
 </head>
 <body>
+  <div class="season-backdrop" aria-hidden="true">
+    <div class="season-bg"></div>
+    <div class="season-veil"></div>
+  </div>
+  <progress id="news-progress" class="news-progress" max="100" value="0" aria-label="阅读进度"></progress>
+
+  <header class="news-topbar">
+    <div class="news-topbar-inner">
+      <div class="news-topbar-left">
+        <a class="news-brand" href="../../">
+          <img class="news-brand-avatar" src="../../img/avatar_hu_dd830dbea31dcb58.png" width="32" height="32" alt="tachika">
+          <span class="news-brand-name">tachika</span>
+        </a>
+        <span class="news-brand-badge">每日新闻</span>
+      </div>
+
+      <nav class="news-nav" aria-label="站点导航">
+        <a href="../../">主页</a>
+        <a href="../../%E4%BD%9C%E5%93%81/">作品</a>
+        <a href="../../archives/">归档</a>
+        <a href="../../%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/">友情链接</a>
+      </nav>
+
+      <div class="news-actions">
+        <button id="news-season-toggle" class="news-pill-btn" type="button" aria-label="切换季节主题" title="切换季节主题">
+          <span class="news-pill-icon" aria-hidden="true">
+            <svg class="season-icon season-icon--spring" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 12c-2.8-2.8-2.8-6.8 0-9 2.8 2.2 2.8 6.2 0 9z"></path>
+              <path d="M12 12c2.8-2.8 6.8-2.8 9 0-2.2 2.8-6.2 2.8-9 0z"></path>
+              <path d="M12 12c2.8 2.8 2.8 6.8 0 9-2.8-2.2-2.8-6.2 0-9z"></path>
+              <path d="M12 12c-2.8 2.8-6.8 2.8-9 0 2.2-2.8 6.2-2.8 9 0z"></path>
+              <circle cx="12" cy="12" r="1.5"></circle>
+            </svg>
+            <svg class="season-icon season-icon--summer" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 21c2-5 6-9 14-12-1 8-5 12-11 12"></path>
+              <path d="M5 17c-1-4 1-9 7-12"></path>
+              <path d="M10 14l4-4"></path>
+            </svg>
+            <svg class="season-icon season-icon--autumn" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l2.2 4.5 4.8-1-2 4.5 3.5 2.5-4.7 1.3.7 3.2-4.5-1.6-4.5 1.6.7-3.2-4.7-1.3L7 11l-2-4.5 4.8 1L12 3z"></path>
+              <path d="M12 16v5"></path>
+            </svg>
+            <svg class="season-icon season-icon--winter" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v18"></path>
+              <path d="M4.2 7.5l15.6 9"></path>
+              <path d="M19.8 7.5l-15.6 9"></path>
+              <path d="M9.5 5.5L12 8l2.5-2.5"></path>
+              <path d="M9.5 18.5L12 16l2.5 2.5"></path>
+            </svg>
+          </span>
+          <span class="news-season-label">春</span>
+        </button>
+
+        <button id="news-scheme-toggle" class="news-pill-btn" type="button" aria-label="切换明暗模式" title="切换明暗模式">
+          <span class="news-pill-icon" aria-hidden="true">
+            <svg class="scheme-icon scheme-icon--light" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+            <svg class="scheme-icon scheme-icon--dark" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path>
+            </svg>
+          </span>
+          <span class="news-scheme-label">亮色</span>
+        </button>
+
+        <button id="refresh" class="news-pill-btn news-refresh-btn" type="button" hidden>刷新榜单</button>
+      </div>
+    </div>
+  </header>
+
   <div class="reader">
-    <nav aria-label="站点导航"><a href="../../">← tachika 首页</a><span>新闻手记</span></nav>
     <main>
-      <header class="masthead">
-        <p class="dateline" id="date">本期生成（北京时间）：暂无</p>
-        <h1>每日热点新闻</h1>
-        <p class="deck">国内四则，国际六则。每则附原文配图、摘要和出处。页面打开时每 5 分钟自动检查新版，切到后台时暂停；也可手动刷新。</p>
-      </header>
-      <div class="notice edition-tools"><div id="status"><span role="status" id="feedback">正在读取本期图文…</span><div class="dateline" id="checked">最近检查（北京时间）：尚未完成</div></div><button id="refresh" type="button" hidden>刷新榜单</button></div>
-      <noscript><p class="notice">请启用 JavaScript 以读取报道，或<a href="./edition.json">查看本站收录数据</a>。</p></noscript>
+      <section class="masthead-card">
+        <header class="masthead">
+          <div class="masthead-kicker-row">
+            <span class="masthead-kicker">新闻手记 · 每日速读</span>
+            <p class="dateline" id="date">本期生成（北京时间）：暂无</p>
+          </div>
+          <h1>每日热点新闻</h1>
+          <p class="deck">国内四则，国际六则。每则附原文配图、摘要和出处。页面打开时每 5 分钟自动检查新版，切到后台时暂停；也可手动刷新。</p>
+        </header>
+        <div class="edition-tools" id="status">
+          <span class="status-feedback" role="status" id="feedback">正在读取本期图文…</span>
+          <div class="dateline status-checked" id="checked">最近检查（北京时间）：尚未完成</div>
+        </div>
+        <noscript><p class="notice">请启用 JavaScript 以读取报道，或<a href="./edition.json">查看本站收录数据</a>。</p></noscript>
+      </section>
+
+      <div class="news-filters" role="group" aria-label="按地域筛选新闻">
+        <button class="news-filter-btn" type="button" data-filter="all" aria-pressed="true">全部 <span class="news-filter-count" data-count="all">10</span></button>
+        <button class="news-filter-btn" type="button" data-filter="domestic" aria-pressed="false">国内 <span class="news-filter-count" data-count="domestic">4</span></button>
+        <button class="news-filter-btn" type="button" data-filter="intl" aria-pressed="false">国际 <span class="news-filter-count" data-count="intl">6</span></button>
+      </div>
+
       <div id="sections"></div>
-      <footer><h2>编排说明</h2><p>只比较当日已收录报道。优先多来源报道；有榜单时参考名次，公开的点赞和评论也计入排序（两者之和加 1，取以 2 为底的对数，最多计 9 分），再以报道时间打破平局。这不是全网点击榜。</p></footer>
+
+      <footer class="colophon-card">
+        <h2>编排说明</h2>
+        <p>只比较当日已收录报道。优先多来源报道；有榜单时参考名次，公开的点赞和评论也计入排序（两者之和加 1，取以 2 为底的对数，最多计 9 分），再以报道时间打破平局。这不是全网点击榜。</p>
+      </footer>
     </main>
   </div>
+
+  <button id="site-backtop" class="news-backtop" type="button" aria-label="返回顶部" title="返回顶部">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5"></path>
+      <path d="M5 12l7-7 7 7"></path>
+    </svg>
+  </button>
 </body>
 </html>

@@ -65,6 +65,7 @@
     caption.append(credit);
     figure.append(img, caption);
     const row = el('li');
+    row.className = 'story-card ' + (s.region === '国内' ? 'is-domestic' : 'is-intl') + (img.naturalWidth < 420 ? ' is-compact-media' : '');
     const num = el('span', String(i + 1).padStart(2, '0'), 'number');
     num.setAttribute('aria-hidden', 'true');
     const body = el('div');
