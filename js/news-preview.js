@@ -278,17 +278,20 @@
   }
 
   function scheduleIdleRefresh() {
+    let triggered = false;
     const run = () => {
+      if (triggered) return;
+      triggered = true;
       if (typeof window.requestIdleCallback === 'function') {
-        window.requestIdleCallback(() => { refreshFromEdition(); }, { timeout: 3000 });
+        window.requestIdleCallback(() => { refreshFromEdition(); }, { timeout: 1200 });
       } else {
-        window.setTimeout(() => { refreshFromEdition(); }, 1200);
+        window.setTimeout(() => { refreshFromEdition(); }, 350);
       }
     };
-    if (document.readyState === 'complete') {
-      run();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run, { once: true });
     } else {
-      window.addEventListener('load', run, { once: true });
+      run();
     }
   }
 
