@@ -1,7 +1,707 @@
-(()=>{function g(e){return Array.isArray(e)?e[Math.floor(Math.random()*e.length)]:e}function L(e){let o=document.createElement("a"),t=window.URL.createObjectURL(e);o.href=t,o.download="live2d.png",o.click(),URL.revokeObjectURL(t)}var p;function D(e,o,t){if(!e||sessionStorage.getItem("waifu-text")&&sessionStorage.getItem("waifu-text")>t)return;p&&(clearTimeout(p),p=null),e=g(e),sessionStorage.setItem("waifu-text",t);let c=document.getElementById("waifu-tips");c.innerHTML=e,c.classList.add("waifu-tips-active"),p=setTimeout(()=>{sessionStorage.removeItem("waifu-text"),c.classList.remove("waifu-tips-active")},o)}var a=D;var v=class{constructor(o){let{cdnPath:t,switchType:c}=o;this.cdnPath=t,this.isOrderSwitch=c==="order"}async loadModelList(){let o=await fetch(`${this.cdnPath}model_list.json`);this.modelList=await o.json(),console.log()}async loadModel(o,t,c){localStorage.setItem("modelId",o),localStorage.setItem("modelTexturesId",t),this.modelList||await this.loadModelList(),a(c,4e3,10);let s=this.modelList.models[o][t];if(s===void 0){if(parseInt(o)===0&&parseInt(t)===0)return;await this.loadModel(0,0,this.modelList.messages[0][0]);return}window.live2d.loadModel(`${this.cdnPath}model/`+s+"/")}async switchTextures(){let o=localStorage.getItem("modelId"),t=parseInt(localStorage.getItem("modelTexturesId"));this.modelList||await this.loadModelList();let c=this.modelList.models[o].length;if(this.isOrderSwitch)t=(t+1)%c;else{let s;do s=Math.floor(Math.random()*c);while(s===t);t=s}this.loadModel(o,t,this.modelList.messages[o][t])}async switchModel(){let o=localStorage.getItem("modelId");this.modelList||await this.loadModelList();let t=++o>=this.modelList.models.length?0:o;this.loadModel(t,0,this.modelList.messages[t][0])}},I=v;var y='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/></svg>';var M='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L277.3 424.9l-40.1 74.5c-5.2 9.7-16.3 14.6-27 11.9S192 499 192 488V392c0-5.3 1.8-10.5 5.1-14.7L362.4 164.7c2.5-7.1-6.5-14.3-13-8.4L170.4 318.2l-32 28.9 0 0c-9.2 8.3-22.3 10.6-33.8 5.8l-85-35.4C8.4 312.8 .8 302.2 .1 290s5.5-23.7 16.1-29.8l448-256c10.7-6.1 23.9-5.5 34 1.4z"/></svg>';var S='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM512 256c0 141.4-114.6 256-256 256S0 397.4 0 256S114.6 0 256 0S512 114.6 512 256zM256 272c39.8 0 72-32.2 72-72s-32.2-72-72-72s-72 32.2-72 72s32.2 72 72 72z"/></svg>';var x='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M320 64c0-35.3-28.7-64-64-64s-64 28.7-64 64s28.7 64 64 64s64-28.7 64-64zm-96 96c-35.3 0-64 28.7-64 64v48c0 17.7 14.3 32 32 32h1.8l11.1 99.5c1.8 16.2 15.5 28.5 31.8 28.5h38.7c16.3 0 30-12.3 31.8-28.5L318.2 304H320c17.7 0 32-14.3 32-32V224c0-35.3-28.7-64-64-64H224zM132.3 394.2c13-2.4 21.7-14.9 19.3-27.9s-14.9-21.7-27.9-19.3c-32.4 5.9-60.9 14.2-82 24.8c-10.5 5.3-20.3 11.7-27.8 19.6C6.4 399.5 0 410.5 0 424c0 21.4 15.5 36.1 29.1 45c14.7 9.6 34.3 17.3 56.4 23.4C130.2 504.7 190.4 512 256 512s125.8-7.3 170.4-19.6c22.1-6.1 41.8-13.8 56.4-23.4c13.7-8.9 29.1-23.6 29.1-45c0-13.5-6.4-24.5-14-32.6c-7.5-7.9-17.3-14.3-27.8-19.6c-21-10.6-49.5-18.9-82-24.8c-13-2.4-25.5 6.3-27.9 19.3s6.3 25.5 19.3 27.9c30.2 5.5 53.7 12.8 69 20.5c3.2 1.6 5.8 3.1 7.9 4.5c3.6 2.4 3.6 7.2 0 9.6c-8.8 5.7-23.1 11.8-43 17.3C374.3 457 318.5 464 256 464s-118.3-7-157.7-17.9c-19.9-5.5-34.2-11.6-43-17.3c-3.6-2.4-3.6-7.2 0-9.6c2.1-1.4 4.8-2.9 7.9-4.5c15.3-7.7 38.8-14.9 69-20.5z"/></svg>';var C='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM164.1 325.5C182 346.2 212.6 368 256 368s74-21.8 91.9-42.5c5.8-6.7 15.9-7.4 22.6-1.6s7.4 15.9 1.6 22.6C349.8 372.1 311.1 400 256 400s-93.8-27.9-116.1-53.5c-5.8-6.7-5.1-16.8 1.6-22.6s16.8-5.1 22.6 1.6zM208.4 208c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32zm92.4 25.6c-5.3 7.1-15.3 8.5-22.4 3.2s-8.5-15.3-3.2-22.4c30.4-40.5 91.2-40.5 121.6 0c5.3 7.1 3.9 17.1-3.2 22.4s-17.1 3.9-22.4-3.2c-17.6-23.5-52.8-23.5-70.4 0z"/></svg>';var b='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-144c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32z"/></svg>';var F='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"/></svg>';var T='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M220.6 121.2L271.1 96 448 96v96H333.2c-21.9-15.1-48.5-24-77.2-24s-55.2 8.9-77.2 24H64V128H192c9.9 0 19.7-2.3 28.6-6.8zM0 128V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H271.1c-9.9 0-19.7 2.3-28.6 6.8L192 64H160V48c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16l0 16C28.7 64 0 92.7 0 128zM344 304c0 48.6-39.4 88-88 88s-88-39.4-88-88s39.4-88 88-88s88 39.4 88 88z"/></svg>';function V(){fetch("https://v1.hitokoto.cn").then(e=>e.json()).then(e=>{let o=`\u8FD9\u53E5\u4E00\u8A00\u6765\u81EA <span>\u300C${e.from}\u300D</span>\uFF0C\u662F <span>${e.creator}</span> \u5728 hitokoto.cn \u6295\u7A3F\u7684\u3002`;a(e.hitokoto,6e3,9),setTimeout(()=>{a(o,4e3,9)},6e3)})}var U={hitokoto:{icon:y,callback:V},asteroids:{icon:M,callback:()=>{if(window.Asteroids)window.ASTEROIDSPLAYERS||(window.ASTEROIDSPLAYERS=[]),window.ASTEROIDSPLAYERS.push(new Asteroids);else{let e=document.createElement("script");e.src="https://fastly.jsdelivr.net/gh/stevenjoezhang/asteroids/asteroids.js",document.head.appendChild(e)}}},express:{icon:C,callback:()=>{window.live2d.randomExpression()}},"switch-model":{icon:S,callback:()=>{}},"switch-texture":{icon:x,callback:()=>{}},info:{icon:b,callback:()=>{open("https://github.com/letere-gzj/live2d-widget-v3")}},photo:{icon:T,callback:async()=>{a("\u7167\u597D\u4E86\u561B\uFF0C\u662F\u4E0D\u662F\u5F88\u53EF\u7231\u5462\uFF1F",6e3,9),L(await window.live2d.getCanvasBlob())}},quit:{icon:F,callback:()=>{a("\u613F\u4F60\u6709\u4E00\u5929\u80FD\u4E0E\u91CD\u8981\u7684\u4EBA\u91CD\u9022\u3002",2e3,11)}}},u=U;function E(e){let o=new I(e);localStorage.removeItem("waifu-display"),sessionStorage.removeItem("waifu-text"),document.body.insertAdjacentHTML("beforeend",`<div id="waifu">
-            <div id="waifu-tips"></div>
-            <canvas id="live2d" width="800" height="800"></canvas>
-            <div id="waifu-tool"></div>
-        </div>`),setTimeout(()=>{document.getElementById("waifu").style.bottom=0},0),function(){u["switch-model"].callback=()=>o.switchModel(),u["switch-texture"].callback=()=>o.switchTextures(),Array.isArray(e.tools)||(e.tools=Object.keys(u));for(let i of e.tools)if(u[i]){let{icon:l,callback:m}=u[i];document.getElementById("waifu-tool").insertAdjacentHTML("beforeend",`<span id="waifu-tool-${i}">${l}</span>`),document.getElementById(`waifu-tool-${i}`).addEventListener("click",m)}}();function t(s){A=s;let i=!1,l,m=s.message.default;window.addEventListener("mousemove",()=>i=!0),window.addEventListener("keydown",()=>i=!0),setInterval(()=>{i?(i=!1,clearInterval(l),l=null):l||(l=setInterval(()=>{a(m,6e3,9)},2e4))},1e3),a(H(),7e3,11),window.addEventListener("mouseover",w=>{for(let{selector:d,text:n}of s.mouseover)if(w.target.closest(d)){n=g(n),n=n.replace("{text}",w.target.innerText),a(n,4e3,8);return}}),window.addEventListener("click",w=>{for(let{selector:d,text:n}of s.click)if(w.target.closest(d)){n=g(n),n=n.replace("{text}",w.target.innerText),a(n,4e3,8);return}}),s.seasons.forEach(({date:w,text:d})=>{let n=new Date,f=w.split("-")[0],r=w.split("-")[1]||f;f.split("/")[0]<=n.getMonth()+1&&n.getMonth()+1<=r.split("/")[0]&&f.split("/")[1]<=n.getDate()&&n.getDate()<=r.split("/")[1]&&(d=g(d),d=d.replace("{year}",n.getFullYear()),m.push(d))});let h=()=>{};console.log("%c",h),h.toString=()=>{a(s.message.console,6e3,9)},window.addEventListener("copy",()=>{a(s.message.copy,6e3,9)}),window.addEventListener("visibilitychange",()=>{document.hidden||a(s.message.visibilitychange,6e3,9)})}function c(){if(e.dragEnable===!1)return;let s=document.getElementById("waifu"),i=document.getElementById("live2d"),l=!1,m,h,w,d;s.onmousedown=function(f){l=!0,m=s.offsetLeft,h=f.clientX,w=s.offsetTop,d=f.clientY};let n=!e.dragDirection||e.dragDirection.length===0;window.onmousemove=function(f){if(l){if(n||e.dragDirection.includes("x")){let r=m+(f.clientX-h);r<0?r=0:r>window.innerWidth-i.clientWidth&&(r=window.innerWidth-i.clientWidth),s.style.left=r+"px"}if(n||e.dragDirection.includes("y")){let r=w+(f.clientY-d);r<30?r=30:r>window.innerHeight-i.clientHeight+10&&(r=window.innerHeight-i.clientHeight+10),s.style.top=r+"px"}}},window.onmouseup=function(f){l=!1}}localStorage.removeItem("waifu-display");(function(){let i=localStorage.getItem("modelId"),l=localStorage.getItem("modelTexturesId");i===null&&(i=0,l=0),new Promise((m,h)=>{window.live2d.init(e.cdnPath+"model/"),m()}).then(()=>{o.loadModel(i,l)}),fetch(e.waifuPath).then(m=>m.json()).then(t).then(c)})()}function B(e,o){typeof e=="string"&&(e={waifuPath:e,apiPath:o}),k=e.homePath,document.body.insertAdjacentHTML("beforeend",`<div id="waifu-toggle">
-            <span>\u770B\u677F\u5A18</span>
-        </div>`);let t=document.getElementById("waifu-toggle");t.addEventListener("click",()=>{t.classList.remove("waifu-toggle-active"),t.getAttribute("first-time")?(E(e),t.removeAttribute("first-time")):(localStorage.removeItem("waifu-display"),document.getElementById("waifu").style.display="",setTimeout(()=>{document.getElementById("waifu").style.bottom=0},0))}),E(e)}var A=null,k="/";function H(){if(location.pathname===k)for(let{hour:t,text:c}of A.time){let s=new Date,i=t.split("-")[0],l=t.split("-")[1]||i;if(i<=s.getHours()&&s.getHours()<=l)return c}let e=`\u6B22\u8FCE\u9605\u8BFB<span>\u300C${document.title.split(" - ")[0]}\u300D</span>`,o;if(document.referrer!==""){let t=new URL(document.referrer),c=t.hostname.split(".")[1],s={baidu:"\u767E\u5EA6",so:"360\u641C\u7D22",google:"\u8C37\u6B4C\u641C\u7D22"};return location.hostname===t.hostname?e:(c in s?o=s[c]:o=t.hostname,`Hello\uFF01\u6765\u81EA <span>${o}</span> \u7684\u670B\u53CB<br>${e}`)}return e}function z(){a(H(),7e3,11)}window.initWidget=B;window.showWelcomeMessage=z;})();
+/*
+ * Tachika Live2D Widget Controller (Rice)
+ * - WebGL2 预检：不支持时静默销毁 #waifu，绝不触发 live2d-sdk.js 清空 document.body
+ * - sessionStorage['tachika:waifu-state'] 折叠态管理：跨页延后初始化防 0x0 死画布，同页 opacity/visibility 保活
+ * - 精简 4 枚圆钮工具栏（一言 / 互动动作 / 拍照 / 收起），自动过滤单模型无效按钮
+ * - 修复拖拽（addEventListener + 锁定 left/top/width 清空 right/bottom）、首页路径识别、closest 文本提取与优先级数值比较
+ * - 监听 tachika:seasonchange 以优先级 12 播报四季专属台词
+ */
+(function () {
+	'use strict';
+
+	var STATE_KEY = 'tachika:waifu-state';
+	var PRIORITY_KEY = 'waifu-text';
+	var DEFAULT_SEASON_LINES = {
+		spring: '樱花开了呢～换上<span>春季</span>的模样，一起看书吧。',
+		summer: '进入<span>夏日</span>竹影了，记得多喝水避暑哦。',
+		autumn: '满院丹枫与银杏～<span>秋天</span>最适合慢慢读文章了。',
+		winter: '下雪啦～换上<span>冬日</span>雪景，注意保暖哦。'
+	};
+
+	var messageTimer = null;
+	var tipsData = null;
+	var homePathConfig = '/';
+	var widgetMounted = false;
+	var listenersBound = false;
+	var collapsed = false;
+
+	function pickRandom(val) {
+		return Array.isArray(val) ? val[Math.floor(Math.random() * val.length)] : val;
+	}
+
+	function escapeHtml(str) {
+		return String(str)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;');
+	}
+
+	function readSession(key) {
+		try {
+			return window.sessionStorage.getItem(key);
+		} catch (e) {
+			return null;
+		}
+	}
+
+	function writeSession(key, val) {
+		try {
+			window.sessionStorage.setItem(key, String(val));
+		} catch (e) {
+			/* 忽略 */
+		}
+	}
+
+	function removeSession(key) {
+		try {
+			window.sessionStorage.removeItem(key);
+		} catch (e) {
+			/* 忽略 */
+		}
+	}
+
+	function hasWebGL2Support() {
+		try {
+			var probe = document.createElement('canvas');
+			var gl = probe.getContext('webgl2');
+			return !!gl;
+		} catch (e) {
+			return false;
+		}
+	}
+
+	function saveBlob(blob) {
+		if (!blob) return;
+		var link = document.createElement('a');
+		var url = window.URL.createObjectURL(blob);
+		link.href = url;
+		link.download = 'live2d-rice.png';
+		link.click();
+		window.setTimeout(function () {
+			window.URL.revokeObjectURL(url);
+		}, 1000);
+	}
+
+	function showMessage(text, timeout, priority) {
+		if (!text || collapsed) return;
+		var stored = readSession(PRIORITY_KEY);
+		var curPri = stored !== null ? Number(stored) : -Infinity;
+		var nextPri = Number(priority || 0);
+		if (!isNaN(curPri) && curPri > nextPri) {
+			return;
+		}
+		var box = document.getElementById('waifu-tips');
+		if (!box) return;
+
+		if (messageTimer) {
+			window.clearTimeout(messageTimer);
+			messageTimer = null;
+		}
+		var picked = pickRandom(text);
+		if (!picked) return;
+
+		writeSession(PRIORITY_KEY, nextPri);
+		box.innerHTML = picked;
+		box.classList.add('waifu-tips-active');
+		messageTimer = window.setTimeout(function () {
+			removeSession(PRIORITY_KEY);
+			box.classList.remove('waifu-tips-active');
+			messageTimer = null;
+		}, timeout || 4000);
+	}
+
+	function ModelManager(config) {
+		this.cdnPath = config.cdnPath;
+		this.isOrderSwitch = config.switchType === 'order';
+		this.modelList = null;
+	}
+
+	ModelManager.prototype.loadModelList = async function () {
+		if (this.modelList) return this.modelList;
+		var res = await fetch(this.cdnPath + 'model_list.json');
+		this.modelList = await res.json();
+		return this.modelList;
+	};
+
+	ModelManager.prototype.loadModel = async function (modelId, texturesId, message) {
+		try {
+			localStorage.setItem('modelId', modelId);
+			localStorage.setItem('modelTexturesId', texturesId);
+		} catch (e) {
+			/* 忽略 */
+		}
+		await this.loadModelList();
+		if (message) {
+			showMessage(message, 4000, 10);
+		}
+		var models = this.modelList && this.modelList.models;
+		if (!models || !models.length) return;
+		var row = models[modelId];
+		var target = row && row[texturesId];
+		if (target === undefined) {
+			if (parseInt(modelId, 10) === 0 && parseInt(texturesId, 10) === 0) return;
+			var fallbackMsg = this.modelList.messages && this.modelList.messages[0] && this.modelList.messages[0][0];
+			await this.loadModel(0, 0, fallbackMsg);
+			return;
+		}
+		window.live2d.loadModel(this.cdnPath + 'model/' + target + '/');
+	};
+
+	ModelManager.prototype.switchTextures = async function () {
+		var modelId = parseInt(localStorage.getItem('modelId') || '0', 10) || 0;
+		var texId = parseInt(localStorage.getItem('modelTexturesId') || '0', 10) || 0;
+		await this.loadModelList();
+		var count = (this.modelList.models[modelId] || []).length;
+		if (count <= 1) return;
+		if (this.isOrderSwitch) {
+			texId = (texId + 1) % count;
+		} else {
+			var randIdx;
+			do {
+				randIdx = Math.floor(Math.random() * count);
+			} while (randIdx === texId);
+			texId = randIdx;
+		}
+		this.loadModel(modelId, texId, this.modelList.messages[modelId][texId]);
+	};
+
+	ModelManager.prototype.switchModel = async function () {
+		var modelId = parseInt(localStorage.getItem('modelId') || '0', 10) || 0;
+		await this.loadModelList();
+		var count = this.modelList.models.length;
+		if (count <= 1) return;
+		var nextId = (modelId + 1) % count;
+		this.loadModel(nextId, 0, this.modelList.messages[nextId][0]);
+	};
+
+	/* ---------------- 精简线性图标 ---------------- */
+
+	var ICONS = {
+		hitokoto:
+			'<svg viewBox="0 0 24 24" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' +
+			'<path d="M21 11.5a8.38 8.38 0 0 1 -.9 3.8a8.5 8.5 0 0 1 -7.6 4.7a8.38 8.38 0 0 1 -3.8 -.9L3 21l1.9 -5.7a8.38 8.38 0 0 1 -.9 -3.8a8.5 8.5 0 0 1 4.7 -7.6a8.38 8.38 0 0 1 3.8 -.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>' +
+			'</svg>',
+		express:
+			'<svg viewBox="0 0 24 24" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' +
+			'<path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9 -4.6L5.5 9.5l4.6 -1.9z"/>' +
+			'<path d="M19 15l.9 2.1L22 18l-2.1 .9L19 21l-.9 -2.1L16 18l2.1 -.9z"/>' +
+			'</svg>',
+		photo:
+			'<svg viewBox="0 0 24 24" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' +
+			'<path d="M23 19a2 2 0 0 1 -2 2H3a2 2 0 0 1 -2 -2V8a2 2 0 0 1 2 -2h4l2 -3h6l2 3h4a2 2 0 0 1 2 2z"/>' +
+			'<circle cx="12" cy="13" r="4"/>' +
+			'</svg>',
+		quit:
+			'<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+			'<polyline points="6 9 12 15 18 9"/>' +
+			'</svg>',
+		toggle:
+			'<svg viewBox="0 0 24 24" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' +
+			'<path d="M12 3l1.8 4.4L18.2 9.2l-4.4 1.8L12 15.4l-1.8 -4.4L5.8 9.2l4.4 -1.8z"/>' +
+			'<path d="M5 19h14"/>' +
+			'</svg>'
+	};
+
+	function fetchHitokoto() {
+		fetch('https://v1.hitokoto.cn')
+			.then(function (r) {
+				if (!r.ok) throw new Error('hitokoto ' + r.status);
+				return r.json();
+			})
+			.then(function (res) {
+				if (!res || !res.hitokoto) throw new Error('empty');
+				var from = escapeHtml(res.from || '一言');
+				var creator = escapeHtml(res.creator || '匿名');
+				showMessage(escapeHtml(res.hitokoto), 6000, 9);
+				window.setTimeout(function () {
+					showMessage('这句一言来自 <span>「' + from + '」</span>，由 <span>' + creator + '</span> 分享。', 4000, 9);
+				}, 6000);
+			})
+			.catch(function () {
+				var fallback = (tipsData && tipsData.message && tipsData.message.default) || '今天也要元气满满地阅读呀～';
+				showMessage(fallback, 4500, 9);
+			});
+	}
+
+	function triggerRandomInteraction() {
+		try {
+			if (window.live2d && typeof window.live2d.randomExpression === 'function') {
+				window.live2d.randomExpression();
+			}
+		} catch (e) {
+			/* 单模型无表情时忽略 */
+		}
+		// 触发 Rice 的 TapBody 随机动作（桌面端 live2d-sdk.js 监听 canvas mouseup）
+		var canvas = document.getElementById('live2d');
+		if (canvas && !('ontouchend' in canvas)) {
+			try {
+				var rect = canvas.getBoundingClientRect();
+				canvas.dispatchEvent(new MouseEvent('mouseup', {
+					bubbles: false,
+					cancelable: true,
+					clientX: rect.left + rect.width * 0.5,
+					clientY: rect.top + rect.height * 0.5
+				}));
+			} catch (e) {
+				/* 忽略 */
+			}
+		}
+		var expressLines = (tipsData && tipsData.message && tipsData.message.express) ||
+			['翻一页书，换个好心情～', '诶嘿，你看我这招怎么样？', '读累了就歇一会儿吧，我陪着你呢。'];
+		showMessage(expressLines, 4200, 10);
+	}
+
+	/* ---------------- 首页识别与欢迎词 ---------------- */
+
+	function isHomePage() {
+		var p = (window.location.pathname || '/').replace(/index\.html$/i, '');
+		if (p === '' || p === '/' || p === '/iepl.github.io' || p === '/iepl.github.io/') {
+			return true;
+		}
+		if (homePathConfig) {
+			var normHome = homePathConfig.replace(/index\.html$/i, '');
+			if (p === normHome || p === normHome + '/') {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function buildWelcomeMessage() {
+		if (!tipsData) return '';
+		if (isHomePage() && Array.isArray(tipsData.time)) {
+			var nowHour = new Date().getHours();
+			for (var i = 0; i < tipsData.time.length; i++) {
+				var entry = tipsData.time[i];
+				var parts = String(entry.hour).split('-');
+				var startH = Number(parts[0]);
+				var endH = parts.length > 1 ? Number(parts[1]) : startH;
+				if (nowHour >= startH && nowHour <= endH) {
+					return entry.text;
+				}
+			}
+		}
+		var pageTitle = escapeHtml((document.title || '').split(' - ')[0] || '这里');
+		var base = '欢迎阅读<span>「' + pageTitle + '」</span>';
+		if (document.referrer) {
+			try {
+				var refUrl = new URL(document.referrer);
+				if (refUrl.hostname && refUrl.hostname !== window.location.hostname) {
+					var domain = refUrl.hostname.split('.')[1];
+					var known = { baidu: '百度', so: '360搜索', google: '谷歌搜索', bing: '必应' };
+					var source = escapeHtml(known[domain] || refUrl.hostname);
+					return '你好呀！来自 <span>' + source + '</span> 的朋友<br>' + base;
+				}
+			} catch (e) {
+				/* 非法 referrer 忽略 */
+			}
+		}
+		return base;
+	}
+
+	/* ---------------- 折叠 / 展开（同页保活画布 + 跨页延后挂载） ---------------- */
+
+	function setCollapsedState(nextCollapsed, skipMessage) {
+		collapsed = !!nextCollapsed;
+		writeSession(STATE_KEY, collapsed ? 'collapsed' : 'open');
+		document.body.classList.toggle('waifu-collapsed', collapsed);
+
+		var waifu = document.getElementById('waifu');
+		var toggle = document.getElementById('waifu-toggle');
+		if (waifu) {
+			waifu.classList.toggle('waifu-hidden', collapsed);
+		}
+		if (toggle) {
+			toggle.classList.toggle('waifu-toggle-active', collapsed);
+		}
+		if (!collapsed && !skipMessage) {
+			var backLines = (tipsData && tipsData.message && tipsData.message.welcomeBack) || '我回来啦～继续陪你逛博客吧！';
+			showMessage(backLines, 4200, 11);
+		}
+	}
+
+	/* ---------------- 拖拽修复（addEventListener + 锁定 left/top/width） ---------------- */
+
+	function bindDrag(config) {
+		if (config.dragEnable === false) return;
+		var waifu = document.getElementById('waifu');
+		var canvas = document.getElementById('live2d');
+		if (!waifu || !canvas) return;
+
+		var allowAll = !Array.isArray(config.dragDirection) || config.dragDirection.length === 0;
+		var allowX = allowAll || config.dragDirection.indexOf('x') >= 0;
+		var allowY = allowAll || config.dragDirection.indexOf('y') >= 0;
+
+		var dragging = false;
+		var moved = false;
+		var startX = 0;
+		var startY = 0;
+		var originLeft = 0;
+		var originTop = 0;
+		var boxWidth = 0;
+		var boxHeight = 0;
+
+		canvas.addEventListener('mousedown', function (ev) {
+			if (ev.button !== 0) return;
+			if (ev.target && ev.target.closest && ev.target.closest('#waifu-tool')) return;
+			var rect = waifu.getBoundingClientRect();
+			dragging = true;
+			moved = false;
+			startX = ev.clientX;
+			startY = ev.clientY;
+			originLeft = rect.left;
+			originTop = rect.top;
+			boxWidth = rect.width || canvas.clientWidth || 300;
+			boxHeight = rect.height || canvas.clientHeight || 300;
+		});
+
+		window.addEventListener('mousemove', function (ev) {
+			if (!dragging) return;
+			var dx = ev.clientX - startX;
+			var dy = ev.clientY - startY;
+			if (!moved && Math.abs(dx) < 4 && Math.abs(dy) < 4) {
+				return;
+			}
+			if (!moved) {
+				moved = true;
+				waifu.classList.add('waifu-dragging');
+				waifu.style.left = originLeft + 'px';
+				waifu.style.top = originTop + 'px';
+				waifu.style.width = boxWidth + 'px';
+				waifu.style.right = 'auto';
+				waifu.style.bottom = 'auto';
+			}
+			if (allowX) {
+				var maxLeft = Math.max(0, window.innerWidth - boxWidth);
+				var nextLeft = Math.min(maxLeft, Math.max(0, originLeft + dx));
+				waifu.style.left = nextLeft + 'px';
+			}
+			if (allowY) {
+				var maxTop = Math.max(0, window.innerHeight - boxHeight + 10);
+				var nextTop = Math.min(maxTop, Math.max(20, originTop + dy));
+				waifu.style.top = nextTop + 'px';
+			}
+		});
+
+		window.addEventListener('mouseup', function () {
+			if (!dragging) return;
+			dragging = false;
+			if (moved) {
+				waifu.classList.remove('waifu-dragging');
+				moved = false;
+			}
+		});
+	}
+
+	/* ---------------- 交互监听（悬浮 / 点击 / 四季切换 / 节气节日） ---------------- */
+
+	function bindTipsEvents(data) {
+		tipsData = data;
+		if (listenersBound) {
+			showMessage(buildWelcomeMessage(), 6500, 11);
+			return;
+		}
+		listenersBound = true;
+
+		var userAction = false;
+		var idleTimer = null;
+		var idleLines = (data.message && Array.isArray(data.message.default)) ? data.message.default.slice() : [];
+
+		window.addEventListener('mousemove', function () { userAction = true; }, { passive: true });
+		window.addEventListener('keydown', function () { userAction = true; }, { passive: true });
+
+		window.setInterval(function () {
+			if (collapsed) return;
+			if (userAction) {
+				userAction = false;
+				if (idleTimer) {
+					window.clearInterval(idleTimer);
+					idleTimer = null;
+				}
+			} else if (!idleTimer && idleLines.length) {
+				idleTimer = window.setInterval(function () {
+					if (!collapsed) {
+						showMessage(idleLines, 6000, 9);
+					}
+				}, 22000);
+			}
+		}, 1000);
+
+		// 节日彩蛋（数值比较月/日，避免字符串比较 Bug）
+		if (Array.isArray(data.seasons)) {
+			var now = new Date();
+			var curMonth = now.getMonth() + 1;
+			var curDay = now.getDate();
+			data.seasons.forEach(function (item) {
+				var range = String(item.date || '').split('-');
+				var start = range[0].split('/');
+				var end = (range[1] || range[0]).split('/');
+				var sM = Number(start[0]);
+				var sD = Number(start[1]);
+				var eM = Number(end[0]);
+				var eD = Number(end[1]);
+				var afterStart = curMonth > sM || (curMonth === sM && curDay >= sD);
+				var beforeEnd = curMonth < eM || (curMonth === eM && curDay <= eD);
+				if (afterStart && beforeEnd) {
+					var line = pickRandom(item.text);
+					if (line) {
+						idleLines.push(line.replace('{year}', String(now.getFullYear())));
+					}
+				}
+			});
+		}
+
+		// 防抖悬停提示（使用 closest(selector)?.textContent?.trim() 避免 SVG 吐 undefined）
+		var lastHoverEl = null;
+		window.addEventListener('mouseover', function (ev) {
+			if (collapsed || !ev.target || !ev.target.closest || !Array.isArray(data.mouseover)) return;
+			for (var i = 0; i < data.mouseover.length; i++) {
+				var rule = data.mouseover[i];
+				var match = ev.target.closest(rule.selector);
+				if (match) {
+					if (match === lastHoverEl) return;
+					lastHoverEl = match;
+					var rawText = (match.textContent || '').replace(/\s+/g, ' ').trim();
+					var msg = pickRandom(rule.text);
+					if (msg) {
+						msg = msg.replace(/\{text\}/g, escapeHtml(rawText || '这里'));
+						showMessage(msg, 4000, 8);
+					}
+					return;
+				}
+			}
+			lastHoverEl = null;
+		}, { passive: true });
+
+		window.addEventListener('click', function (ev) {
+			if (collapsed || !ev.target || !ev.target.closest || !Array.isArray(data.click)) return;
+			for (var i = 0; i < data.click.length; i++) {
+				var rule = data.click[i];
+				var match = ev.target.closest(rule.selector);
+				if (match) {
+					var rawText = (match.textContent || '').replace(/\s+/g, ' ').trim();
+					var msg = pickRandom(rule.text);
+					if (msg) {
+						msg = msg.replace(/\{text\}/g, escapeHtml(rawText || '这里'));
+						showMessage(msg, 4000, 8);
+					}
+					return;
+				}
+			}
+		});
+
+		window.addEventListener('copy', function () {
+			if (data.message && data.message.copy) {
+				showMessage(data.message.copy, 5500, 9);
+			}
+		});
+
+		window.addEventListener('visibilitychange', function () {
+			if (!document.hidden && data.message && data.message.visibilitychange) {
+				showMessage(data.message.visibilitychange, 5500, 9);
+			}
+		});
+
+		// 监听四季切换事件，以最高优先级 12 播报春夏秋冬专属台词
+		window.addEventListener('tachika:seasonchange', function (ev) {
+			var season = ev && ev.detail && ev.detail.season;
+			if (!season) return;
+			var pool = (data.seasonChange && data.seasonChange[season]) || DEFAULT_SEASON_LINES[season];
+			if (pool) {
+				showMessage(pool, 5500, 12);
+			}
+		});
+
+		showMessage(buildWelcomeMessage(), 6500, 11);
+	}
+
+	/* ---------------- 挂载看板娘主体 ---------------- */
+
+	function mountWaifu(config) {
+		if (widgetMounted) {
+			setCollapsedState(false, false);
+			return;
+		}
+		// 严格先探测 WebGL2，不支持则静默退出，绝不让 live2d-sdk.js 清空页面
+		if (!hasWebGL2Support() || !window.live2d || typeof window.live2d.init !== 'function') {
+			var existing = document.getElementById('waifu');
+			if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+			var toggle = document.getElementById('waifu-toggle');
+			if (toggle && toggle.parentNode) toggle.parentNode.removeChild(toggle);
+			document.body.classList.remove('waifu-collapsed');
+			document.body.classList.add('no-waifu');
+			return;
+		}
+
+		widgetMounted = true;
+		collapsed = false;
+		try {
+			localStorage.removeItem('waifu-display');
+		} catch (e) {
+			/* 忽略 */
+		}
+		removeSession(PRIORITY_KEY);
+
+		document.body.insertAdjacentHTML(
+			'beforeend',
+			'<div id="waifu" class="waifu-entering">' +
+				'<div id="waifu-tips" role="status" aria-live="polite"></div>' +
+				'<canvas id="live2d" width="800" height="800"></canvas>' +
+				'<div id="waifu-tool"></div>' +
+			'</div>'
+		);
+
+		window.requestAnimationFrame(function () {
+			var w = document.getElementById('waifu');
+			if (w) w.classList.remove('waifu-entering');
+		});
+
+		var modelManager = new ModelManager(config);
+		var toolBar = document.getElementById('waifu-tool');
+
+		var toolDefs = {
+			hitokoto: {
+				icon: ICONS.hitokoto,
+				label: '听一句一言',
+				callback: fetchHitokoto
+			},
+			express: {
+				icon: ICONS.express,
+				label: '互动一下',
+				callback: triggerRandomInteraction
+			},
+			photo: {
+				icon: ICONS.photo,
+				label: '合影留念',
+				callback: async function () {
+					showMessage('照好了嘛，是不是很可爱呢？', 5000, 10);
+					try {
+						if (window.live2d && typeof window.live2d.getCanvasBlob === 'function') {
+							saveBlob(await window.live2d.getCanvasBlob());
+						}
+					} catch (e) {
+						/* 忽略 */
+					}
+				}
+			},
+			quit: {
+				icon: ICONS.quit,
+				label: '收起看板娘',
+				callback: function () {
+					showMessage('先去书桌边歇一会儿，点右下角胶囊随时叫我哦～', 1200, 12);
+					window.setTimeout(function () {
+						setCollapsedState(true, true);
+					}, 850);
+				}
+			}
+		};
+
+		// 固定呈现精简 4 枚优雅圆钮，并自动过滤单模型无效的 switch-model / switch-texture
+		var activeTools = ['hitokoto', 'express', 'photo', 'quit'];
+		activeTools.forEach(function (name) {
+			var def = toolDefs[name];
+			if (!def || !toolBar) return;
+			var btn = document.createElement('button');
+			btn.type = 'button';
+			btn.id = 'waifu-tool-' + name;
+			btn.className = 'waifu-tool-btn';
+			btn.setAttribute('aria-label', def.label);
+			btn.setAttribute('title', def.label);
+			btn.innerHTML = def.icon;
+			btn.addEventListener('click', function (ev) {
+				ev.stopPropagation();
+				def.callback();
+			});
+			toolBar.appendChild(btn);
+		});
+
+		// 初始化 Live2D 模型
+		var modelId = localStorage.getItem('modelId');
+		var texId = localStorage.getItem('modelTexturesId');
+		if (modelId === null) {
+			modelId = 0;
+			texId = 0;
+		}
+		Promise.resolve()
+			.then(function () {
+				window.live2d.init(config.cdnPath + 'model/');
+			})
+			.then(function () {
+				return modelManager.loadModel(modelId, texId);
+			})
+			.catch(function () {
+				/* 静默容错 */
+			});
+
+		fetch(config.waifuPath)
+			.then(function (r) { return r.json(); })
+			.then(bindTipsEvents)
+			.catch(function () {
+				/* JSON 加载失败不影响模型渲染 */
+			});
+
+		bindDrag(config);
+	}
+
+	/* ---------------- 全局入口 initWidget / showWelcomeMessage ---------------- */
+
+	function initWidget(config, apiPath) {
+		if (typeof config === 'string') {
+			config = { waifuPath: config, apiPath: apiPath };
+		}
+		config = config || {};
+		homePathConfig = config.homePath || '/';
+
+		try {
+			localStorage.removeItem('waifu-display');
+		} catch (e) {
+			/* 忽略 */
+		}
+
+		// 若无 WebGL2 支持，直接静默退出并不挂载胶囊与画布
+		if (!hasWebGL2Support() || !window.live2d || typeof window.live2d.init !== 'function') {
+			document.body.classList.add('no-waifu');
+			return;
+		}
+
+		var toggle = document.getElementById('waifu-toggle');
+		if (!toggle) {
+			toggle = document.createElement('button');
+			toggle.type = 'button';
+			toggle.id = 'waifu-toggle';
+			toggle.setAttribute('aria-label', '展开看板娘 Rice');
+			toggle.setAttribute('title', '召唤看板娘 Rice');
+			toggle.innerHTML = ICONS.toggle + '<span>Rice</span>';
+			document.body.appendChild(toggle);
+		}
+
+		toggle.addEventListener('click', function () {
+			if (!widgetMounted) {
+				writeSession(STATE_KEY, 'open');
+				document.body.classList.remove('waifu-collapsed');
+				toggle.classList.remove('waifu-toggle-active');
+				mountWaifu(config);
+			} else {
+				setCollapsedState(false, false);
+			}
+		});
+
+		// 跨页若本会话处于 collapsed，只展示迷你胶囊并延后初始化（防 0x0 死画布）
+		if (readSession(STATE_KEY) === 'collapsed') {
+			collapsed = true;
+			document.body.classList.add('waifu-collapsed');
+			toggle.classList.add('waifu-toggle-active');
+			return;
+		}
+
+		mountWaifu(config);
+	}
+
+	function showWelcomeMessage() {
+		showMessage(buildWelcomeMessage(), 6500, 11);
+	}
+
+	window.initWidget = initWidget;
+	window.showWelcomeMessage = showWelcomeMessage;
+}());
