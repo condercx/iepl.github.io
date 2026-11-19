@@ -427,13 +427,26 @@
     
 
     <section class="article-list">
-        <article>
+        <article class="daily-news-hero" id="daily-news-hero">
             <div class="article-details">
-                <span>每日更新 · 新闻速读</span>
-                <div class="article-title-wrapper">
-                    <h2 class="article-title"><a href="./p/daily-news/">每日热点新闻 →</a></h2>
-                    <p class="article-subtitle">国内四则，国际六则。每则附原文配图、摘要和出处。</p>
+                <div class="daily-news-hero__kicker">
+                    <span class="daily-news-hero__kicker-label">每日更新 · 东方报刊速读</span>
+                    <time class="daily-news-hero__date" data-news-date></time>
                 </div>
+                <div class="article-title-wrapper">
+                    <h2 class="article-title daily-news-hero__title"><a href="./p/daily-news/">每日热点新闻</a></h2>
+                    <p class="article-subtitle">国内四则，国际六则。每则附原文配图、摘要和出处，按北京时间自动编排。</p>
+                </div>
+                <div class="daily-news-hero__badges">
+                    <span>国内 4</span>
+                    <span>国际 6</span>
+                    <span>图文速览</span>
+                </div>
+                <div class="daily-news-hero__preview" data-news-preview hidden>
+                    <a class="daily-news-hero__lead" href="./p/daily-news/" data-news-lead></a>
+                    <ol class="daily-news-hero__headlines" data-news-headlines></ol>
+                </div>
+                <a class="daily-news-hero__cta" href="./p/daily-news/">阅读今日完整十则 →</a>
             </div>
         </article>
         
@@ -750,6 +763,7 @@
   }
 </script>
 <script src="/iepl.github.io/js/sakura.js"></script><script src="/iepl.github.io/js/season.js"></script>
+<script src="./js/news-preview.js" defer></script>
 
 <script defer src="https://cn.vercount.one/js"></script><script>
     function showHideView() {
