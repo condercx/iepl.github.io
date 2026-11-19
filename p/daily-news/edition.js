@@ -85,7 +85,9 @@
     return row;
   }
   let best = null;
-  let pending = 3;
+  const refresh = document.querySelector('#refresh');
+  let pending = 0;
+  let feedback = '';
   let empty = false;
   let remoteFailed = false;
   function report() {
@@ -97,21 +99,23 @@
       if (pending) text += ' 正在核对最新期次…';
       else if (remoteFailed) text += ' 更新源暂不可用，当前显示已核验的快照。';
     }
-    status.textContent = text;
+    status.textContent = feedback ? `${text} ${feedback}` : text;
   }
-  async function load(url) {
+  async function load(url, manual) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 9000);
     try {
       let data;
       if (url === null) data = JSON.parse(localStorage.getItem(cacheKey));
       else {
-        const res = await fetch(url, {cache: 'no-cache', credentials: 'omit', signal: controller.signal});
+        const target = manual ? `${url}?check=${Date.now()}` : url;
+        const res = await fetch(target, {cache: manual ? 'no-store' : 'no-cache', credentials: 'omit', signal: controller.signal});
         if (!res.ok) throw Error('unavailable');
         data = await res.json();
       }
       if (!valid(data)) throw Error('invalid edition');
       if (!data.date) { empty = true; return; }
+      if (best && Date.parse(data.updated) <= Date.parse(best.updated)) return true;
       const rows = await Promise.all(data.stories.map(story));
       // A slower fetch or decode must not replace a newer, complete edition.
       if (best && Date.parse(data.updated) <= Date.parse(best.updated)) return;
@@ -123,10 +127,32 @@
       dateLine.textContent = `${data.date}  /  北京时间 ${clock.format(new Date(data.updated))} 更新`;
       best = data;
       if (url !== null) { try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch {} }
+      return true;
     } catch { if (url === remote) remoteFailed = true; }
     finally { clearTimeout(timer); pending--; report(); }
   }
-  load(null);
-  load('./edition.json');
-  load(remote);
+  async function check(manual) {
+    if (refresh.disabled) return;
+    refresh.disabled = true;
+    refresh.textContent = manual ? '刷新中…' : '读取中…';
+    const before = best;
+    feedback = '';
+    remoteFailed = empty = false;
+    const urls = manual ? ['./edition.json', remote] : [null, './edition.json', remote];
+    pending = urls.length;
+    report();
+    try {
+      const results = await Promise.all(urls.map(url => load(url, manual)));
+      if (manual && best !== before) feedback = '已载入新版榜单。';
+      else if (manual && results.at(-1) && best) feedback = '没有新一期。';
+      else if (manual) feedback = '未能确认有新一期，可稍后再试。';
+    } finally {
+      refresh.disabled = false;
+      refresh.textContent = '刷新榜单';
+      report();
+    }
+  }
+  refresh.hidden = false;
+  refresh.addEventListener('click', () => check(true));
+  check(false);
 })();
